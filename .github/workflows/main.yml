@@ -5,11 +5,12 @@ on:
   pull_request:
     branches:
       - base
+  workflow_workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: instal WSO2 tools
+      - name: install WSO2 tools
         uses: actions/checkout@v3
         with:
           repository: gogo-transit/cicd
@@ -20,7 +21,7 @@ jobs:
         run: |
          wget https://raw.githubusercontent.com/gogo-transit/train-api/rules/rules.yaml
          mkdir -p rules
-         mv rules.yaml rules
+         mv rules.yaml rules/
       - name: Checkout API Code
         uses: actions/checkout@v3
         with:
