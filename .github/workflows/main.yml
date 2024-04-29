@@ -46,8 +46,9 @@ jobs:
           ./tools/api_governance_cli_tool/api-governance-cli-tool-linux --config ./tools/api_governance_cli_tool/config.yaml --ruleset ./rules/rules.yaml --directory ./base/TrainStationApi/1.0.0/TrainStationApi-1.0.0 >> result.txt
       - name: Update Results
         shell: sh
-        if: always()
+        if: github.event_name == 'pull_request_target' && always()
         run: |
+          cd base
           gh pr comment ${{ github.event.number }} --body "$(cat result.txt)"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
