@@ -1,0 +1,52 @@
+name: API Validation Build
+
+
+on:
+  pull_request:
+    branches:
+      - base
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: instal WSO2 tools
+        uses: actions/checkout@v3
+        with:
+          repository: gogo-transit/cicd
+          ref: refs/heads/main
+          fetch-depth: '10'
+          path: tools
+      - name: Download governance rules
+        run: |
+         wget https://raw.githubusercontent.com/gogo-transit/train-api/rules/rules.yaml
+         mkdir -p rules
+         mv rules.yaml rules
+      - name: Checkout API Code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: "0"
+          path: base
+          token: ${{ secrets.BOT_TOKEN }}
+      - name: Set release username and email
+        shell: sh
+        run: |
+          git config --global user.name ${{ secrets.BOT_USER }}
+          git config --global user.email ${{ secrets.BOT_EMAIL }}
+      - name: checkout pull request and merge.
+        shell: sh
+        if: github.event_name == 'pull_request_target'
+        run: |
+          cd base
+          gh pr checkout ${{ github.event.number }} -b pr-${{ github.event.number }}
+          git checkout pr-${{ github.event.number }}
+          git merge origin/base
+      - name: Run governance Validation
+        run: |
+          ./tools/api_governance_cli_tool/api-governance-cli-tool-linux --config ./tools/api_governance_cli_tool/config.yaml --ruleset ./rules/rules.yaml --directory ./base/TrainStationApi/1.0.0/TrainStationApi-1.0.0 >> result.txt
+      - name: Update Results
+        shell: sh
+        if: always()
+        run: |
+          gh pr comment ${{ github.event.number }} --body "$(cat result.txt)"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
