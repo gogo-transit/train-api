@@ -43,7 +43,7 @@ jobs:
           git merge origin/base
       - name: Run governance Validation
         run: |
-          lS -al train-api/tools
+          ls -al train-api/tools
           tree 
           ./train-api/tools/api_governance_cli_tool/api-governance-cli-tool-linux --config "train-api/tools/api_governance_cli_tool/config.yaml" --ruleset ./rules/rules.yaml --directory ".train-api/base/TrainStationApi/1.0.0/TrainStationApi-1.0.0"
       - name: Update Results
