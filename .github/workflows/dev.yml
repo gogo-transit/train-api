@@ -34,7 +34,7 @@ jobs:
       - name: Login to Dev Environment
         shell: sh
         run: |
-          tools/apictl/apictl login dev -u ${{ secrets.DEV_USERNAME }} -p ${{ secrets.DEV_PASSWORD }}
+          tools/apictl/apictl login dev -u ${{ secrets.DEV_USERNAME }} -p ${{ secrets.DEV_PASSWORD }} --insecure
         if: github.event_name == 'pull_request_target' && github.events.action == 'closed' || github.event_name == 'workflow_dispatch'
       - name: Checkout API Code
         uses: actions/checkout@v3
@@ -45,7 +45,7 @@ jobs:
         shell: sh
         run: |
           wget https://github.com/gogo-transit/train-api/releases/download/latest/TrainStationApi-1.0.0.zip
-          tools/apictl/apictl import api -f TrainStationApi-1.0.0.zip -e dev --update --preserve-provider=false --params base/params.yaml
+          tools/apictl/apictl import api -f TrainStationApi-1.0.0.zip -e dev --update --preserve-provider=false --params base/params.yaml --insecure
         if: github.event_name == 'pull_request_target' && github.events.action == 'closed' || github.event_name == 'workflow_dispatch'
       - name: Logout to Dev Environment
         shell: sh
