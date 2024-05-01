@@ -2,7 +2,7 @@ name: API Validation Build
 
 
 on:
-  pull_request:
+  pull_request_target:
     branches:
       - base
   workflow_dispatch:
@@ -29,7 +29,6 @@ jobs:
         with:
           fetch-depth: "0"
           path: base
-          token: ${{ secrets.BOT_TOKEN }}
       - name: Set release username and email
         shell: sh
         run: |
@@ -43,15 +42,16 @@ jobs:
           gh pr checkout ${{ github.event.number }} -b pr-${{ github.event.number }}
           git checkout pr-${{ github.event.number }}
           git merge origin/base
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
       - name: Run governance Validation
         run: |
-          md5sum tools/api_governance_cli_tool/api-governance-cli-tool-linux
-          tools/api_governance_cli_tool/api-governance-cli-tool-linux validate --config "tools/api_governance_cli_tool/config.yaml" --ruleset "rules/rules.yaml" --directory "base/TrainStationApi/1.0.0/TrainStationApi-1.0.0" --verbose >>result.txt
+          tools/api_governance_cli_tool/api-governance-cli-tool-linux validate --config "tools/api_governance_cli_tool/config.yaml" --ruleset "rules/rules.yaml" --directory "base/TrainStationApi/1.0.0/TrainStationApi-1.0.0" --verbose >> result.txt
       - name: Update Results
         shell: sh
         if: github.event_name == 'pull_request_target' && always()
         run: |
           cd base
-          gh pr comment ${{ github.event.number }} --body "$(cat result.txt)"
+          gh pr comment ${{ github.event.number }} --body "$(cat ../result.txt)"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
