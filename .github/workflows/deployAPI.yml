@@ -1,0 +1,42 @@
+name: API Package
+on:
+  pull_request_target:
+    branches:
+      - base
+    types:
+      - closed
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: install WSO2 tools
+        run: |
+          mkdir -p tools
+          wget https://github.com/gogo-transit/cicd/releases/download/v1/api_governance_cli_tool.zip
+          unzip api_governance_cli_tool.zip
+          wget https://github.com/wso2/product-apim-tooling/releases/download/v4.3.0/apictl-4.3.0-linux-amd64.tar.gz
+          tar -xzvf apictl-4.3.0-linux-amd64.tar.gz
+          mv api_governance_cli_tool tools
+          mv apictl tools/
+      - name: Checkout API Code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: "0"
+          path: base
+      - name: Set release username and email
+        shell: sh
+        run: |
+          git config --global user.name ${{ secrets.BOT_USER }}
+          git config --global user.email ${{ secrets.BOT_EMAIL }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+      - name: Create API Archieve
+        run: |
+            tools/apictl/apictl package -s base/TrainStationApi/1.0.0/TrainStationApi-1.0.0
+        if: github.event_name == 'pull_request_target' && github.events.action == 'closed' || github.event_name == 'workflow_dispatch'
+      - name: Upload API Archieve
+        uses: actions/upload-artifact@v4
+        with:
+          name: TrainStationApi-1.0.0
+          path: base/TrainStationApi/1.0.0/TrainStationApi-1.0.0/TrainStationApi-1.0.0.zip
