@@ -29,7 +29,6 @@ jobs:
         with:
           fetch-depth: "0"
           path: base
-          token: ${{ secrets.BOT_TOKEN }}
       - name: Set release username and email
         shell: sh
         run: |
@@ -54,4 +53,4 @@ jobs:
           cd base
           gh pr comment ${{ github.event.number }} --body "$(cat result.txt)"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
