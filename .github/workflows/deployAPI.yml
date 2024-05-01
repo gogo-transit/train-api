@@ -38,11 +38,10 @@ jobs:
       - name: Upload Release artifact
         shell: sh
         run: |
-          cd base
           gh release delete 1.0.0-${{ github.sha}} --cleanup-tag --yes || true
-          gh release create 1.0.0-${{ github.sha}} ../TrainStationApi-1.0.0.zip --title "Release 1.0.0-${{ github.sha}}" --notes "Release notes for 1.0.0-${{ github.sha}}" --draft false --prerelease false || true
+          gh release create 1.0.0-${{ github.sha}} TrainStationApi-1.0.0.zip --title "Release 1.0.0-${{ github.sha}}" --notes "Release notes for 1.0.0-${{ github.sha}}" --draft false --prerelease false || true
           gh release delete latest --cleanup-tag --yes || true
-          gh release create latest ../TrainStationApi-1.0.0.zip --title "Release latest" --notes "Release notes for latest" --draft false --prerelease false || true
+          gh release create latest TrainStationApi-1.0.0.zip --title "Release latest" --notes "Release notes for latest" --draft false --prerelease false || true
           
         env:
           GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
