@@ -39,4 +39,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: TrainStationApi-1.0.0
-          path: base/TrainStationApi/1.0.0/TrainStationApi-1.0.0/TrainStationApi-1.0.0.zip
+          path: TrainStationApi-1.0.0.zip
