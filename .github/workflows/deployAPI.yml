@@ -39,10 +39,10 @@ jobs:
         shell: sh
         run: |
           cd base
-          gh release delete 1.0.0-${{ github.sha}} --cleanup-tag --yes
-          gh release create 1.0.0-${{ github.sha}} ../TrainStationApi-1.0.0.zip
-          gh release delete latest --cleanup-tag --yes
-          gh release create latest ../TrainStationApi-1.0.0.zip
+          gh release delete 1.0.0-${{ github.sha}} --cleanup-tag --yes || true
+          gh release create 1.0.0-${{ github.sha}} ../TrainStationApi-1.0.0.zip || true
+          gh release delete latest --cleanup-tag --yes || true
+          gh release create latest ../TrainStationApi-1.0.0.zip || true
           
         env:
           GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
