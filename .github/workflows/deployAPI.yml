@@ -35,8 +35,15 @@ jobs:
         run: |
             tools/apictl/apictl bundle -s base/TrainStationApi/1.0.0/TrainStationApi-1.0.0
         if: github.event_name == 'pull_request_target' && github.events.action == 'closed' || github.event_name == 'workflow_dispatch'
-      - name: Upload API Archieve
-        uses: actions/upload-artifact@v4
-        with:
-          name: TrainStationApi-1.0.0
-          path: TrainStationApi-1.0.0.zip
+      - name: Upload Release artifact
+        shell: sh
+        run: |
+          cd base
+          gh release delete 1.0.0-${{ github.sha}} --cleanup-tag --yes
+          gh release create 1.0.0-${{ github.sha}} ../TrainStationApi-1.0.0.zip
+          gh release delete latest --cleanup-tag --yes
+          gh release create latest ../TrainStationApi-1.0.0.zip
+          
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+        if: github.event_name == 'pull_request_target' && github.events.action == 'closed' || github.event_name == 'workflow_dispatch'
