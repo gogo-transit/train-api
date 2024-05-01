@@ -23,9 +23,9 @@ jobs:
       - name: Setup API Controller Configurations
         run: |
           mkdir -p $HOME/.wso2apictl
-          echo "${{CTL_CONFIG}}">> $HOME/.wso2apictl/main_config.yaml
+          echo "$CTL_CONFIG">> $HOME/.wso2apictl/main_config.yaml
           mkdir -p $HOME/.wso2apictl.local
-          echo ${{CTL_KEYS}}>> $HOME/.wso2apictl.local/keys.json
+          echo $CTL_KEYS>> $HOME/.wso2apictl.local/keys.json
         if: github.event_name == 'pull_request_target' && github.events.action == 'closed' || github.event_name == 'workflow_dispatch'
         env:
           CTL_CONFIG: ${{ secrets.CTL_CONFIG }}
