@@ -42,6 +42,8 @@ jobs:
           gh pr checkout ${{ github.event.number }} -b pr-${{ github.event.number }}
           git checkout pr-${{ github.event.number }}
           git merge origin/base
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
       - name: Run governance Validation
         run: |
           md5sum tools/api_governance_cli_tool/api-governance-cli-tool-linux
