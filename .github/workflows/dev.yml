@@ -39,6 +39,8 @@ jobs:
       - name: Checkout API Code
         uses: actions/checkout@v3
         with:
+          repository: gogo-transit/train-api
+          ref: dev
           fetch-depth: "0"
           path: dev
       - name: Deploy API to Dev Environment
