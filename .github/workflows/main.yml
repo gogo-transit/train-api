@@ -43,7 +43,8 @@ jobs:
           git merge origin/base
       - name: Run governance Validation
         run: |
-          ./tools/api_governance_cli_tool/api-governance-cli-tool-linux --config "tools/api_governance_cli_tool/config.yaml" --ruleset "rules/rules.yaml" --directory "base/TrainStationApi/1.0.0/TrainStationApi-1.0.0"
+          md5sum tools/api_governance_cli_tool/api-governance-cli-tool-linux
+          tools/api_governance_cli_tool/api-governance-cli-tool-linux --config "tools/api_governance_cli_tool/config.yaml" --ruleset "rules/rules.yaml" --directory "base/TrainStationApi/1.0.0/TrainStationApi-1.0.0"
       - name: Update Results
         shell: sh
         if: github.event_name == 'pull_request_target' && always()
