@@ -46,7 +46,7 @@ jobs:
       - name: Run governance Validation
         run: |
           md5sum tools/api_governance_cli_tool/api-governance-cli-tool-linux
-          tools/api_governance_cli_tool/api-governance-cli-tool-linux validate --config "tools/api_governance_cli_tool/config.yaml" --ruleset "rules/rules.yaml" --directory "base/TrainStationApi/1.0.0/TrainStationApi-1.0.0"
+          tools/api_governance_cli_tool/api-governance-cli-tool-linux validate --config "tools/api_governance_cli_tool/config.yaml" --ruleset "rules/rules.yaml" --directory "base/TrainStationApi/1.0.0/TrainStationApi-1.0.0" --verbose >>result.txt
       - name: Update Results
         shell: sh
         if: github.event_name == 'pull_request_target' && always()
