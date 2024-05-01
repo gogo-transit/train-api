@@ -45,7 +45,7 @@ jobs:
         shell: sh
         run: |
           wget https://github.com/gogo-transit/train-api/releases/download/latest/TrainStationApi-1.0.0.zip
-          tools/apictl/apictl import api -f TrainStationApi-1.0.0.zip -e dev --update --preserve-provider=false --params base/params.yaml --insecure
+          tools/apictl/apictl import api -f TrainStationApi-1.0.0.zip -e dev --update --preserve-provider=false --params dev/params.yaml --insecure
         if: github.event_name == 'pull_request_target' && github.events.action == 'closed' || github.event_name == 'workflow_dispatch'
       - name: Logout to Dev Environment
         shell: sh
