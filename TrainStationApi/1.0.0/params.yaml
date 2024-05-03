@@ -5,6 +5,6 @@ environments:
             production:
                 url: 'http://backend-dev-service:8080/train-operations/v1/'
         deploymentEnvironments:
-            - displayOnDevportal: true
+            - displayOnDevportal: false
               deploymentEnvironment: Default
               deploymentVhost : dev.gw.apim.com
