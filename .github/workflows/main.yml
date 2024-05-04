@@ -1,0 +1,60 @@
+name: API Validation Build
+
+
+on:
+  pull_request_target:
+    branches:
+      - base
+    types: 
+      - open
+      - synchronize
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: install WSO2 tools
+        run: |
+          mkdir -p tools
+          wget https://github.com/gogo-transit/cicd/releases/download/v1/api_governance_cli_tool.zip
+          unzip api_governance_cli_tool.zip
+          wget https://github.com/wso2/product-apim-tooling/releases/download/v4.3.0/apictl-4.3.0-linux-amd64.tar.gz
+          tar -xzvf apictl-4.3.0-linux-amd64.tar.gz
+          mv api_governance_cli_tool tools
+          mv apictl tools/
+      - name: Download governance rules
+        run: |
+         mkdir -p rules
+         wget https://raw.githubusercontent.com/gogo-transit/train-api/rules/rules.yaml
+         mv rules.yaml rules/
+      - name: Checkout API Code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: "0"
+          path: base
+      - name: Set release username and email
+        shell: sh
+        run: |
+          git config --global user.name ${{ secrets.BOT_USER }}
+          git config --global user.email ${{ secrets.BOT_EMAIL }}
+      - name: checkout pull request and merge.
+        shell: sh
+        if: github.event_name == 'pull_request_target'
+        run: |
+          cd base
+          gh pr checkout ${{ github.event.number }} -b pr-${{ github.event.number }}
+          git checkout pr-${{ github.event.number }}
+          git merge origin/base
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+      - name: Run governance Validation
+        run: |
+          tools/api_governance_cli_tool/api-governance-cli-tool-linux validate --config "tools/api_governance_cli_tool/config.yaml" --ruleset "rules/rules.yaml" --directory "base/TrainStationApi/1.0.0/TrainStationApi-1.0.0" --verbose >> result.txt
+      - name: Update Results
+        shell: sh
+        if: github.event_name == 'pull_request_target' && always()
+        run: |
+          cd base
+          gh pr comment ${{ github.event.number }} --body "$(cat ../result.txt)"
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
