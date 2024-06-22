@@ -2,7 +2,7 @@ type: api
 version: v4.3.0
 data:
   name: TrainStationApi
-  description: API for retrieving information about train stations
+  description: API for retrieving information about train stations.
   context: /trainstationapi
   version: 1.0.0
   provider: admin
@@ -30,7 +30,6 @@ data:
   securityScheme:
    - basic
    - oauth_basic_auth_api_key_mandatory
-   - oauth2
   visibility: PUBLIC
   visibleRoles: []
   visibleTenants: []
