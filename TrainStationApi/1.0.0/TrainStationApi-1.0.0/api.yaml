@@ -29,6 +29,7 @@ data:
   authorizationHeader: Authorization
   apiKeyHeader: ApiKey
   securityScheme:
+   - oauth_basic_auth_api_key_mandatory
    - basic
   visibility: PUBLIC
   visibleRoles: []
