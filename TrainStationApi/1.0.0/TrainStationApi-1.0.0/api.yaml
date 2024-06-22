@@ -27,7 +27,7 @@ data:
   policies:
    - Unlimited
   authorizationHeader: Authorization
-  apiKeyHeader: ApiKey
+  apiKeyHeader: ApiKey1
   securityScheme:
    - basic
   visibility: PUBLIC
