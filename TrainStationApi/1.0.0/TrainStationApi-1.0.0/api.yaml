@@ -1,7 +1,6 @@
 type: api
 version: v4.3.0
 data:
-  id: 2166e768-7940-47cd-9604-4f0ac70fa79f
   name: TrainStationApi
   description: API for retrieving information about train stations
   context: /trainstationapi
@@ -30,6 +29,8 @@ data:
   apiKeyHeader: ApiKey
   securityScheme:
    - basic
+   - oauth_basic_auth_api_key_mandatory
+   - oauth2
   visibility: PUBLIC
   visibleRoles: []
   visibleTenants: []
