@@ -1,6 +1,4 @@
 name: API Validation Build
-
-
 on:
   pull_request_target:
     branches:
